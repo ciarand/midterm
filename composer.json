@@ -1,0 +1,18 @@
+{
+    "require-dev": {
+        "psy/psysh": "dev-master",
+        "ciarand/make-php-nice": "dev-master",
+        "phpspec/prophecy": "~1.1.2"
+    },
+    "config": {
+        "bin-dir": "./bin/"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ciarand\\Midterm\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    }
+}
