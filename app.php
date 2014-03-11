@@ -10,8 +10,9 @@ include "spec/Reporter/TapReporterSpec.php";
 include "spec/SuiteHelperSpec.php";
 include "spec/SpecSpec.php";
 include "spec/Expectation/StrictEqualityMatcherSpec.php";
+include "spec/Presenter/ArrayPresenterSpec.php";
 
 $midterm = GlobalState::getMidterm();
 //$midterm->addReporter(new TapReporter);
 $midterm->addReporter(new DotReporter);
-$midterm->go();
+exit($midterm->go());

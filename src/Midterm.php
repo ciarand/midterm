@@ -24,6 +24,8 @@ class Midterm extends BaseComponent
      */
     protected $suites = array();
 
+    protected $exitCode = 0;
+
     /**
      * Runs each of the specs
      *
@@ -32,6 +34,7 @@ class Midterm extends BaseComponent
     public function go()
     {
         $result = new TestResult($this->suites);
+        $result->on("spec_fail", array($this, "onSpecFail"));
 
         foreach ($this->reporters as $reporter) {
             $reporter->subscribe($result);
@@ -45,6 +48,8 @@ class Midterm extends BaseComponent
         }
 
         $result->endTest();
+
+        return $this->exitCode;
     }
 
     /**
@@ -85,5 +90,10 @@ class Midterm extends BaseComponent
     public function getCurrentSuite()
     {
         return end($this->suites);
+    }
+
+    public function onSpecFail()
+    {
+        $this->exitCode = 1;
     }
 }
