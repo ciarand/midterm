@@ -1,2 +1,4 @@
-all:
+all: test
+	
+test:
 	php app.php

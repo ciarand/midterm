@@ -41,7 +41,8 @@ class TapReporter extends NullReporter
     {
         $suite = $this->result->getCurrentSuite();
 
-        return $this->write("# %s\n", $suite->title);
+        //return $this->write("# %s\n", $suite->title);
+        return $this->write("# New suite\n");
     }
 
     protected function getSubscriptions()

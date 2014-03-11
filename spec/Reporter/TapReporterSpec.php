@@ -72,7 +72,7 @@ describe("TapReporter", function ($vars) {
             ->output()->toMatch("/^not ok 1 - test: message$/m");
     });
 
-    it("prints a comment line when starting a new suite", function () {
+    xit("prints a comment line when starting a new suite", function () {
         $reporter = new TapReporter;
         $prophet = new Prophet;
 
