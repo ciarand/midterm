@@ -64,7 +64,7 @@ class SpecResult extends BaseComponent
      */
     public function didFail()
     {
-        return ($this->status & static::DID_FAIL);
+        return (bool) ($this->status & static::DID_FAIL);
     }
 
     /**
@@ -74,7 +74,7 @@ class SpecResult extends BaseComponent
      */
     public function didPass()
     {
-        return ($this->status & static::DID_PASS);
+        return (bool) ($this->status & static::DID_PASS);
     }
 
     /**
@@ -84,7 +84,7 @@ class SpecResult extends BaseComponent
      */
     public function didSkip()
     {
-        return ($this->status & static::DID_SKIP);
+        return (bool) ($this->status & static::DID_SKIP);
     }
 
     /**
