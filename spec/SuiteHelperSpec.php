@@ -26,7 +26,7 @@ describe("SuiteHelper", function ($vars) {
         $message   = "foo bar baz!";
         $wasCalled = false;
 
-        $helper->on("fail", function ($actual) use ($message, $wasCalled) {
+        $helper->on("fail", function ($actual) use ($message, &$wasCalled) {
             expect($actual)->toBe($message);
 
             $wasCalled = true;
@@ -42,7 +42,7 @@ describe("SuiteHelper", function ($vars) {
         $message   = "foo bar";
         $wasCalled = false;
 
-        $helper->on("skip", function ($actual) use ($message, $wasCalled) {
+        $helper->on("skip", function ($actual) use ($message, &$wasCalled) {
             expect($actual)->toBe($message);
 
             $wasCalled = true;

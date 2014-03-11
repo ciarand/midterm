@@ -22,9 +22,9 @@ class Expectation extends BaseComponent
 
     public function toBe($expected)
     {
-        $comparator = new StrictEqualityMatcher($this->actual);
+        $comparator = new StrictEqualityMatcher($expected);
 
-        $this->checkWith($comparator, $expected);
+        $this->checkWith($comparator);
     }
 
     public function output()
