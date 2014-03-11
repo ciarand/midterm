@@ -1,7 +1,6 @@
 <?php namespace Ciarand\Midterm\Result;
 
 use SplStack;
-use Ciarand\Midterm\Reporter\ReporterInterface;
 use Ciarand\Midterm\EventEmitter;
 use Ciarand\Midterm\Suite;
 

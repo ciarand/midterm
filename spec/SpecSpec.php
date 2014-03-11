@@ -93,7 +93,7 @@ describe("Spec", function ($vars) {
 
         $runner = new SpecRunner($test);
 
-        $runner->with(array(array("foo"), array("bar")));
+        $runner->with(array("foo"), array("bar"));
 
         $runner->run(new SuiteHelper);
 

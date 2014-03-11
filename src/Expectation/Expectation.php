@@ -38,6 +38,13 @@ class Expectation extends BaseComponent
         return $this;
     }
 
+    public function toReturn($expected)
+    {
+        $this->actual = $this->callback($this->actual);
+
+        return $this->toBe($expected);
+    }
+
     public function toMatch($pattern)
     {
         $comparator = new StringPatternMatcher($pattern);

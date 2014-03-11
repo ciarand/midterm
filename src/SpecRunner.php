@@ -26,10 +26,9 @@ class SpecRunner extends EventEmitter
         $this->emit("end");
     }
 
-    public function with(array $data)
+    public function with()
     {
-        // check it's valid
-        $this->data = $data;
+        $this->data = func_get_args();
     }
 
     protected function runSpecWith(array $data, SuiteHelper $helper)
