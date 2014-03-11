@@ -4,6 +4,7 @@ use Ciarand\Midterm\Suite;
 use Ciarand\Midterm\SuiteHelper;
 use Ciarand\Midterm\GlobalState;
 use Ciarand\Midterm\Spec;
+use Ciarand\Midterm\SpecRunner;
 use Ciarand\Midterm\Expectation\Expectation;
 use Ciarand\Midterm\Exception\CallbackNotCallableException;
 
@@ -54,7 +55,11 @@ function it($title, $callback)
 
     $midterm = GlobalState::getMidterm();
 
-    $midterm->getCurrentSuite()->addSpec(new Spec($title, $callback));
+    $runner = new SpecRunner(new Spec($title, $callback));
+
+    $midterm->getCurrentSuite()->addSpecRunner($runner);
+
+    return $runner;
 }
 
 /**

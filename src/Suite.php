@@ -1,6 +1,7 @@
 <?php namespace Ciarand\Midterm;
 
 use Countable;
+use Ciarand\Midterm\Result\SpecResult;
 
 class Suite extends EventEmitter implements Countable
 {
@@ -34,19 +35,9 @@ class Suite extends EventEmitter implements Countable
     /**
      * @param Spec $spec
      */
-    public function addSpec(Spec $spec)
+    public function addSpecRunner(SpecRunner $runner)
     {
-        $this->specs[] = $spec;
-    }
-
-    /**
-     * An alias for addSpec
-     *
-     * @param Spec $spec
-     */
-    public function test(Spec $spec)
-    {
-        $this->addSpec($spec);
+        $this->specs[] = $runner;
     }
 
     /**
@@ -57,7 +48,9 @@ class Suite extends EventEmitter implements Countable
         $this->emit("begin");
 
         foreach ($this->specs as $spec) {
-            $this->emit("update", array($spec->run($this->helper)));
+            $spec->on("update", array($this, "onSpecUpdate"));
+
+            $spec->run($this->helper);
         }
 
         $this->emit("end");
@@ -66,5 +59,10 @@ class Suite extends EventEmitter implements Countable
     public function count()
     {
         return count($this->specs);
+    }
+
+    public function onSpecUpdate(SpecResult $result)
+    {
+        $this->emit("update", array($result));
     }
 }

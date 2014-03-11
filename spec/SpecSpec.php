@@ -1,6 +1,7 @@
 <?php
 
 use Ciarand\Midterm\Spec;
+use Ciarand\Midterm\SpecRunner;
 use Ciarand\Midterm\SuiteHelper;
 use Ciarand\Midterm\Exception\SpecFailedException;
 use Ciarand\Midterm\Exception\SpecSkippedException;
@@ -13,7 +14,7 @@ describe("Spec", function ($vars) {
 
         $suiteHelper = new SuiteHelper;
 
-        $result = $test->run($suiteHelper);
+        $result = $test->runWithData(array(), $suiteHelper);
         expect($result->didFail())->toBe(false);
         expect($result->didSkip())->toBe(false);
         expect($result->didPass())->toBe(true);
@@ -26,7 +27,7 @@ describe("Spec", function ($vars) {
 
         $suiteHelper = new SuiteHelper;
 
-        $result = $test->run($suiteHelper);
+        $result = $test->runWithData(array(), $suiteHelper);
         expect($result->didFail())->toBe(true);
         expect($result->didSkip())->toBe(false);
         expect($result->didPass())->toBe(false);
@@ -39,7 +40,7 @@ describe("Spec", function ($vars) {
 
         $suiteHelper = new SuiteHelper;
 
-        $result = $test->run($suiteHelper);
+        $result = $test->runWithData(array(), $suiteHelper);
         expect($result->didFail())->toBe(false);
         expect($result->didSkip())->toBe(true);
         expect($result->didPass())->toBe(false);
@@ -78,8 +79,24 @@ describe("Spec", function ($vars) {
             // do nothing
         });
 
-        $result = $test->run(new SuiteHelper);
+        $result = $test->runWithData(array(), new SuiteHelper);
 
         expect($result->getMessage())->toBe(null);
+    });
+
+    it("should run multiple times when `with` is called", function ($spec) {
+        $count = 0;
+
+        $test = new Spec("foo", function () use (&$count) {
+            $count += 1;
+        });
+
+        $runner = new SpecRunner($test);
+
+        $runner->with(array(array("foo"), array("bar")));
+
+        $runner->run(new SuiteHelper);
+
+        expect($count)->toBe(2);
     });
 });

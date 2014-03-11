@@ -19,6 +19,11 @@ class Spec extends BaseComponent
     protected $callback;
 
     /**
+     * @var array
+     */
+    protected $args = array();
+
+    /**
      * @param string $title
      * @param callable $callback
      */
@@ -32,7 +37,7 @@ class Spec extends BaseComponent
      * @param SuiteHelper $helper
      * @return SpecResult
      */
-    public function run(SuiteHelper $helper)
+    public function runWithData(array $data, SuiteHelper $helper)
     {
         $factory = new SpecResultFactory;
 
@@ -45,7 +50,8 @@ class Spec extends BaseComponent
             }
 
             ob_start();
-            call_user_func($this->callback, $helper);
+            array_push($data, $helper);
+            call_user_func_array($this->callback, $data);
             ob_end_clean();
 
             return $factory->pass($this->title);
@@ -70,5 +76,10 @@ class Spec extends BaseComponent
     public function skip($message)
     {
         throw new SpecSkippedException($message);
+    }
+
+    public function with(array $args)
+    {
+        $this->args = $args;
     }
 }
