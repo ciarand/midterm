@@ -1,5 +1,6 @@
 language: php
 php:
+    - 5.6
     - 5.5
     - 5.4
     - 5.3
@@ -14,4 +15,4 @@ script:
 matrix:
     allow_failures:
         # until hhvm supports closures correctly
-        - hhvm
+        - php: hhvm
