@@ -16,28 +16,29 @@ describe("DotReporter", function ($vars) {
     $failure->getMessage()->willReturn("foo was not bar");
     $failure->title = "test title";
 
-    $vars->inject(get_defined_vars());
+    it(
+        "prints an F for a failing test",
+        function () use ($baseReporter, $failure) {
+            $reporter = clone $baseReporter;
 
-    it("prints an F for a failing test", function ($params) {
-        extract($params->export());
-        $reporter = clone $baseReporter;
+            expect(function () use ($reporter, $failure) {
+                $reporter->onSpecFail($failure->reveal());
+            })->output()->toBe("F");
+        }
+    );
 
-        expect(function () use ($reporter, $failure) {
-            $reporter->onSpecFail($failure->reveal());
-        })->output()->toBe("F");
-    });
+    it(
+        "prints a . for a passing test",
+        function () use ($baseReporter, $success) {
+            $reporter = clone $baseReporter;
 
-    it("prints a . for a passing test", function ($params) {
-        extract($params->export());
-        $reporter = clone $baseReporter;
+            expect(function () use ($reporter, $success) {
+                $reporter->onSpecPass($success->reveal());
+            })->output()->toBe(".");
+        }
+    );
 
-        expect(function () use ($reporter, $success) {
-            $reporter->onSpecPass($success->reveal());
-        })->output()->toBe(".");
-    });
-
-    it("prints the time taken in a test run", function ($params) {
-        extract($params->export());
+    it("prints the time taken in a test run", function () use ($baseReporter) {
         $reporter = clone $baseReporter;
 
         // Start the clock
@@ -48,8 +49,7 @@ describe("DotReporter", function ($vars) {
         })->output()->toMatch('/^Time: (\-)?\d+(\.\d{1,2})?.*/m');
     });
 
-    it("prints the memory taken in a test run", function ($params) {
-        extract($params->export());
+    it("prints the memory taken in a test run", function () use ($baseReporter) {
         $reporter = clone $baseReporter;
 
         expect(function () use ($reporter) {
@@ -57,58 +57,71 @@ describe("DotReporter", function ($vars) {
         })->output()->toMatch('/Memory: ([0-9]+\.[0-9]+)*/m');
     });
 
-    it("prints OK when no tests failed", function ($params) {
-        extract($params->export());
-        $reporter = clone $baseReporter;
+    it(
+        "prints OK when no tests failed",
+        function () use ($baseReporter, $success) {
+            $reporter = clone $baseReporter;
 
-        for ($i = 0; $i < 3; $i += 1) {
-            $reporter->onUpdate($success->reveal());
+            for ($i = 0; $i < 3; $i += 1) {
+                $reporter->onUpdate($success->reveal());
+            }
+
+            expect(function () use ($reporter) {
+                $reporter->onTestEnd();
+            })->output()->toMatch("/^OK/m");
         }
+    );
 
-        expect(function () use ($reporter) {
-            $reporter->onTestEnd();
-        })->output()->toMatch("/^OK/m");
-    });
+    it(
+        "prints FAILURES! when at least one test failed",
+        function () use ($baseReporter, $failure) {
+            $reporter = clone $baseReporter;
 
-    it("prints FAILURES! when at least one test failed", function ($params) {
-        extract($params->export());
-        $reporter = clone $baseReporter;
-
-        $reporter->onUpdate($failure->reveal());
-        expect(array($reporter, "onTestEnd"))->output()->toMatch("/^FAILURES!/m");
-    });
-
-    it("prints the number of tests with no failures", function ($params) {
-        extract($params->export());
-        $reporter = clone $baseReporter;
-
-        for ($i = 0; $i < 3; $i += 1) {
-            $reporter->onUpdate($success->reveal());
+            $reporter->onUpdate($failure->reveal());
+            expect(array($reporter, "onTestEnd"))
+                ->output()->toMatch("/^FAILURES!/m");
         }
+    );
 
-        expect(array($reporter, "onTestEnd"))->output()->toMatch("/\(3 tests\)/");
-    });
+    it(
+        "prints the number of tests with no failures",
+        function () use ($baseReporter, $success) {
+            $reporter = clone $baseReporter;
 
-    it("prints the number of tests with some failures", function ($params) {
-        extract($params->export());
-        $reporter = clone $baseReporter;
+            for ($i = 0; $i < 3; $i += 1) {
+                $reporter->onUpdate($success->reveal());
+            }
 
-        $reporter->onUpdate($failure->reveal());
-
-        for ($i = 0; $i < 3; $i += 1) {
-            $reporter->onUpdate($success->reveal());
+            expect(array($reporter, "onTestEnd"))
+                ->output()->toMatch("/\(3 tests\)/");
         }
+    );
 
-        expect(array($reporter, "onTestEnd"))->output()->toMatch("/Failures: 1/");
-    });
+    it(
+        "prints the number of tests with some failures",
+        function () use ($baseReporter, $failure, $success) {
+            $reporter = clone $baseReporter;
 
-    it("prints the failed spec names", function ($params) {
-        extract($params->export());
-        $reporter = clone $baseReporter;
+            $reporter->onUpdate($failure->reveal());
 
-        $reporter->onUpdate($failure->reveal());
+            for ($i = 0; $i < 3; $i += 1) {
+                $reporter->onUpdate($success->reveal());
+            }
 
-        expect(array($reporter, "onTestEnd"))
-            ->output()->toMatch("/^1\) test title: foo was not bar$/m");
-    });
+            expect(array($reporter, "onTestEnd"))
+                ->output()->toMatch("/Failures: 1/");
+        }
+    );
+
+    it(
+        "prints the failed spec names",
+        function () use ($baseReporter, $failure) {
+            $reporter = clone $baseReporter;
+
+            $reporter->onUpdate($failure->reveal());
+
+            expect(array($reporter, "onTestEnd"))
+                ->output()->toMatch("/^1\) test title: foo was not bar$/m");
+        }
+    );
 });
