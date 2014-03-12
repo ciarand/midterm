@@ -10,3 +10,8 @@ install:
 
 script:
     - make test
+
+matrix:
+    allow_failures:
+        # until hhvm supports closures correctly
+        - hhvm
