@@ -5,7 +5,7 @@ class NullPresenter extends AbstractPresenter
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function present($item)
+    public function present(PresenterInterface $parent, $item)
     {
         return "NULL";
     }

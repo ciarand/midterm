@@ -2,8 +2,8 @@
 
 class StringPresenter extends AbstractPresenter
 {
-    public function present($item)
+    public function present(PresenterInterface $parent, $object)
     {
-        return '"' . addslashes($item) . '"';
+        return '"' . addslashes($object) . '"';
     }
 }

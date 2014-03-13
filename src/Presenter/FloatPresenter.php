@@ -2,7 +2,7 @@
 
 class FloatPresenter extends AbstractPresenter
 {
-    public function present($item)
+    public function present(PresenterInterface $parent, $item)
     {
         return $item;
     }

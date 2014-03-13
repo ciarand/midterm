@@ -1,16 +1,16 @@
 <?php
 
-use Ciarand\Midterm\Presenter\RecursivePresenter;
+use Ciarand\Midterm\Presenter\PresenterFactory;
 
 describe("ArrayPresenter", function () {
     it("prints an empty array correctly", function () {
-        $presenter = new RecursivePresenter;
+        $presenter = new PresenterFactory;
 
         expect(array($presenter, "present", array()))->toReturn("[]");
     });
 
     it("prints values correctly", function ($arr, $expectation) {
-        $presenter = new RecursivePresenter;
+        $presenter = new PresenterFactory;
 
         expect(array($presenter, "present", $arr))->toReturn($expectation);
     })->with(
@@ -23,7 +23,7 @@ describe("ArrayPresenter", function () {
         array(array(array(), array()), '[[], []]'),
         array(array("foo" => "bar"), '["foo" => "bar"]'),
         array(array("foo" => "bar", "baz"), '["foo" => "bar", 0 => "baz"]'),
-        array(array("baz", "foo" => "bar"), '["baz", "foo" => "bar"]'),
+        array(array("baz", "foo" => "bar"), '[0 => "baz", "foo" => "bar"]'),
         array("foo", '"foo"'),
         array(1, 1),
         array("1", '"1"'),

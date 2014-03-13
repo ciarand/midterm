@@ -2,7 +2,7 @@
 
 class ObjectPresenter extends AbstractPresenter
 {
-    public function present($item)
+    public function present(PresenterInterface $parent, $item)
     {
         // Stolen directly from Psy
         $format = '\\<%s #%s>';

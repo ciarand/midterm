@@ -1,6 +1,9 @@
 <?php namespace Ciarand\Midterm\Presenter;
 
-abstract class AbstractPresenter implements PresenterInterface
+use Ciarand\Midterm\BaseComponent;
+
+abstract class AbstractPresenter extends BaseComponent implements
+    TypePresenterInterface
 {
-    abstract public function present($object);
+    abstract public function present(PresenterInterface $parent, $object);
 }
