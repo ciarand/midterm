@@ -9,71 +9,65 @@ use Ciarand\Midterm\BaseComponent;
 
 class FileGlobber extends BaseComponent
 {
+    // Cache the results so we don't reparse every time
+    protected $info;
+
     public function __construct($pattern)
     {
         $this->pattern = $pattern;
+
+        $this->info = $this->globInfo();
     }
 
     public function getIterator()
     {
-        $info = $this->globInfo();
-
-        $directory = $info["regex"]
-            ? new RecursiveDirectoryIterator($info["dirname"])
-            : new DirectoryIterator($info["dirname"]);
+        $directory = $this->info["regex"]
+            ? new RecursiveDirectoryIterator($this->info["dirname"])
+            : new DirectoryIterator($this->info["dirname"]);
 
         return new RegexIterator(
             new RecursiveIteratorIterator($directory),
-            $info["regex"],
+            $this->info["regex"],
             RecursiveRegexIterator::GET_MATCH
         );
     }
 
     public function isRecursive()
     {
-        $info = $this->globInfo();
-
-        return $info["recursive"];
+        return $this->info["recursive"];
     }
 
+    // Get the info regarding the glob. Similar to pathinfo, but with the
+    // following fields:
+    //      dirname => the name of the directory, with all stars removed
+    //      regex => the regex to match for files on
+    //      recursive => whether to follow directories recursively
     protected function globInfo()
     {
-        // We need to get:
-        // a. starting dir
-        //      will either be . or specified
-        // b. a regex representing the filename
-        //      if the * is followed by, like, a *.php
-        //      if the * is preceeded by, like, a Test*
-        // c. whether it's recursive or not
-        //      check presense of **
-
-        $recursive = false;
-
         $pathinfo = pathinfo($this->pattern);
 
-        $dirname = $pathinfo["dirname"];
+        $pos = strpos($pathinfo["dirname"], "**");
 
-        $pos = strpos($dirname, "**");
-        if ($pos !== false) {
-            $recursive = true;
-            $dirname = substr($dirname, 0, $pos);
-        }
+        $dirname = $pos !== false
+            ? (substr($pathinfo["dirname"], 0, $pos) ?: ".")
+            : $pathinfo["dirname"];
 
-        $dirname = $dirname ?: ".";
+        $recursive = $pos !== false;
 
-        $regex = sprintf(
-            "/^%s$/",
-            str_replace(
-                array(".", "*"),
-                array("\\.", "(.+)?"),
-                $pathinfo["basename"]
-            )
-        );
+        $regex = $this->convertGlobToRegex($pathinfo["basename"]);
 
         return array(
             "dirname" => $dirname,
             "regex" => $regex,
             "recursive" => $recursive,
+        );
+    }
+
+    protected function convertGlobToRegex($glob)
+    {
+        return sprintf(
+            "/^%s$/",
+            str_replace(array(".", "*"), array("\\.", "(.+)?"), $glob)
         );
     }
 }
