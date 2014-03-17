@@ -26,8 +26,8 @@ describe("TapReporter", function ($vars) {
         $result->countSpecs()->willReturn(3);
         $reporter->subscribe($result->reveal());
 
-        expect(array($reporter, "onTestBegin"))
-            ->output()->toMatch("/^TAP version 13$/m");
+        expect(array($reporter, "onTestBegin"))->when()->run()
+            ->output()->match("/^TAP version 13$/m");
     });
 
     it("prints a 1 test plan correctly", function ($vars) {
@@ -36,8 +36,8 @@ describe("TapReporter", function ($vars) {
         $result->countSpecs()->willReturn(1);
         $reporter->subscribe($result->reveal());
 
-        expect(array($reporter, "onTestBegin"))
-            ->output()->toMatch("/^1..1$/m");
+        expect(array($reporter, "onTestBegin"))->when()->run()
+            ->output()->match("/^1..1$/m");
     });
 
     it("prints an N test plan correctly", function ($vars) {
@@ -46,30 +46,37 @@ describe("TapReporter", function ($vars) {
         $result->countSpecs()->willReturn(7);
         $reporter->subscribe($result->reveal());
 
-        expect(array($reporter, "onTestBegin"))
-            ->output()->toMatch("/^1..7$/m");
+        expect(array($reporter, "onTestBegin"))->when()->run()
+            ->output()->match("/^1..7$/m");
     });
 
     it("prints 'ok' on a passing test", function ($vars) {
-        extract(call_user_func($vars["beforeEach"]));
-        $reporter->subscribe($result->reveal());
+        $callback = callback(function () use ($vars) {
+            extract(call_user_func($vars["beforeEach"]));
+            $reporter->subscribe($result->reveal());
 
-        $specResult = $prophet->prophesize(SpecResult::className());
-        $specResult->title = "message";
+            $specResult = $prophet->prophesize(SpecResult::className());
+            $specResult->title = "message";
 
-        expect(array($reporter, "onSpecPass", $specResult->reveal()))
-            ->output()->toMatch("/^ok 1 - message/m");
+            $reporter->onSpecPass($specResult->reveal());
+        });
+        expect($callback)->when()->run()->output()->match("/^ok 1 - message/m");
     });
 
     it("prints 'not ok' on a failing test", function ($vars) {
-        extract(call_user_func($vars["beforeEach"]));
+        $callback = callback(function () use ($vars) {
+            extract(call_user_func($vars["beforeEach"]));
 
-        $specResult = $prophet->prophesize(SpecResult::className());
-        $specResult->title = "test";
-        $specResult->getMessage()->willReturn("message");
+            $specResult = $prophet->prophesize(SpecResult::className());
+            $specResult->title = "test";
+            $specResult->getMessage()->willReturn("message");
 
-        expect(array($reporter, "onSpecFail", $specResult->reveal()))
-            ->output()->toMatch("/^not ok 1 - test: message$/m");
+            $reporter = new TapReporter;
+            $reporter->onSpecFail($specResult->reveal());
+        });
+
+        expect($callback)->when()->run()
+            ->output()->match("/^not ok 1 - test: message$/m");
     });
 
     xit("prints a comment line when starting a new suite", function () {
@@ -84,7 +91,7 @@ describe("TapReporter", function ($vars) {
         $result->getCurrentSuite()->willReturn($suite->reveal());
         $reporter->subscribe($result->reveal());
 
-        expect(array($reporter, "onSuiteBegin"))
-            ->output()->toMatch("/^# suite title$/m");
+        expect(array($reporter, "onSuiteBegin"))->when()->run()
+            ->output()->match("/^# suite title$/m");
     });
 });

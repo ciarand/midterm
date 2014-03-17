@@ -2,6 +2,7 @@
 
 use Ciarand\Midterm\Reporter\ReporterInterface;
 use Ciarand\Midterm\Result\TestResult;
+use Ciarand\Midterm\Collection\SuiteCollection;
 
 /**
  * The Midterm class is the driver for the tests. It holds the list of
@@ -22,9 +23,18 @@ class Midterm extends BaseComponent
      *
      * @var array<Suite>
      */
-    protected $suites = array();
+    protected $suites;
 
     protected $exitCode = 0;
+
+    protected $container;
+
+    public function __construct(Container $container)
+    {
+        $this->suites = new SuiteCollection;
+
+        $this->container = $container;
+    }
 
     /**
      * Runs each of the specs
@@ -33,7 +43,7 @@ class Midterm extends BaseComponent
      */
     public function go()
     {
-        $result = new TestResult($this->suites);
+        $result = $this->container->make(TestResult::className(), $this->suites);
         $result->on("spec_fail", array($this, "onSpecFail"));
 
         foreach ($this->reporters as $reporter) {
@@ -89,11 +99,16 @@ class Midterm extends BaseComponent
      */
     public function getCurrentSuite()
     {
-        return end($this->suites);
+        return $this->suites->end();
     }
 
     public function onSpecFail()
     {
         $this->exitCode = 1;
+    }
+
+    public function getContainer()
+    {
+        return $this->container;
     }
 }

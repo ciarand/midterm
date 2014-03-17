@@ -2,6 +2,7 @@
 
 use Ciarand\Midterm\Exception\SpecFailedException;
 use Ciarand\Midterm\BaseComponent;
+use Exception;
 
 class Expectation extends BaseComponent
 {
@@ -22,9 +23,16 @@ class Expectation extends BaseComponent
 
     public function toBe($expected)
     {
-        $comparator = new StrictEqualityMatcher($expected);
+        $matcher = new StrictEqualityMatcher($expected);
 
-        $this->checkWith($comparator);
+        $this->checkWith($matcher);
+    }
+
+    public function toBeAnInstanceOf($expected)
+    {
+        $matcher = new InstanceOfMatcher($expected);
+
+        $this->checkWith($matcher);
     }
 
     public function output()
@@ -47,9 +55,16 @@ class Expectation extends BaseComponent
 
     public function toMatch($pattern)
     {
-        $comparator = new StringPatternMatcher($pattern);
+        $matcher = new StringPatternMatcher($pattern);
 
-        $this->checkWith($comparator);
+        $this->checkWith($matcher);
+    }
+
+    public function toThrow(Exception $exception)
+    {
+        $expectation = new ExceptionExpectation($this->actual);
+
+        return $expectation->toThrow($exception);
     }
 
     protected function callback($thing)
@@ -66,12 +81,17 @@ class Expectation extends BaseComponent
         throw new CallbackNotCallableException();
     }
 
-    protected function checkWith(MatcherInterface $comparator)
+    protected function checkWith(MatcherInterface $matcher)
     {
-        if ($comparator->test($this->actual)) {
+        if ($matcher->test($this->actual)) {
             return $this;
         }
 
-        throw new SpecFailedException($comparator->getMessage());
+        throw new SpecFailedException($matcher->getMessage());
+    }
+
+    protected function whenRun()
+    {
+        $this->callback($this->actual);
     }
 }

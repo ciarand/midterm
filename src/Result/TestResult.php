@@ -3,6 +3,7 @@
 use SplStack;
 use Ciarand\Midterm\EventEmitter;
 use Ciarand\Midterm\Suite;
+use Ciarand\Midterm\Collection\SuiteCollection;
 
 class TestResult extends EventEmitter
 {
@@ -26,7 +27,7 @@ class TestResult extends EventEmitter
      *
      * @param array<Suites>
      */
-    public function __construct(array $suites)
+    public function __construct(SuiteCollection $suites)
     {
         $this->suiteStack = new SplStack;
 

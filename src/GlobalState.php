@@ -23,7 +23,7 @@ class GlobalState extends BaseComponent
     public static function getMidterm()
     {
         if (!static::$instance instanceof Midterm) {
-            static::$instance = new Midterm;
+            static::$instance = new Midterm(new Container);
         }
 
         return static::$instance;

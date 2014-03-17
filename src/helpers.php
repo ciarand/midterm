@@ -5,7 +5,8 @@ use Ciarand\Midterm\SuiteHelper;
 use Ciarand\Midterm\GlobalState;
 use Ciarand\Midterm\Spec;
 use Ciarand\Midterm\SpecRunner;
-use Ciarand\Midterm\Expectation\Expectation;
+use Ciarand\Midterm\CallbackGenerator;
+use Ciarand\Midterm\Expectation\AmorphousExpectation;
 use Ciarand\Midterm\Exception\CallbackNotCallableException;
 
 /**
@@ -80,14 +81,17 @@ function xit($title, $callback)
  */
 function expect($thing)
 {
-    return new Expectation($thing);
+    return new AmorphousExpectation($thing);
 }
 
-/**
- * Attaches all the variables stored in the provided SuiteHelper to the current
- * variable scope
- */
-function attach(SuiteHelper $helper)
+function callback($callback)
 {
-    extract($helper->export());
+    return with(new CallbackGenerator)->generate($callback);
+}
+
+if (!function_exists("with")) {
+    function with($object)
+    {
+        return $object;
+    }
 }

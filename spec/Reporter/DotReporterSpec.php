@@ -23,7 +23,7 @@ describe("DotReporter", function ($vars) {
 
             expect(function () use ($reporter, $failure) {
                 $reporter->onSpecFail($failure->reveal());
-            })->output()->toBe("F");
+            })->when()->run()->toOutput("F");
         }
     );
 
@@ -34,66 +34,75 @@ describe("DotReporter", function ($vars) {
 
             expect(function () use ($reporter, $success) {
                 $reporter->onSpecPass($success->reveal());
-            })->output()->toBe(".");
+            })->when()->run()->toOutput(".");
         }
     );
 
     it("prints the time taken in a test run", function () use ($baseReporter) {
-        $reporter = clone $baseReporter;
-
-        // Start the clock
-        $reporter->onTestBegin();
-
-        expect(function () use ($reporter) {
+        $callback = callback(function () use ($baseReporter) {
+            $reporter = clone $baseReporter;
+            $reporter->onTestBegin();
             $reporter->onTestEnd();
-        })->output()->toMatch('/^Time: (\-)?\d+(\.\d{1,2})?.*/m');
+        });
+
+        expect($callback)->when()->run()
+            ->output()->match('/^Time: (\-)?\d+(\.\d{1,2})?.*/m');
     });
 
     it("prints the memory taken in a test run", function () use ($baseReporter) {
-        $reporter = clone $baseReporter;
-
-        expect(function () use ($reporter) {
+        $callback = callback(function () use ($baseReporter) {
+            $reporter = clone $baseReporter;
             $reporter->onTestEnd();
-        })->output()->toMatch('/Memory: ([0-9]+\.[0-9]+)*/m');
+        });
+
+        expect($callback)->when()->run()
+            ->output()->match('/Memory: ([0-9]+\.[0-9]+)*/m');
     });
 
     it(
         "prints OK when no tests failed",
         function () use ($baseReporter, $success) {
-            $reporter = clone $baseReporter;
+            $callback = callback(function () use ($baseReporter, $success) {
+                $reporter = clone $baseReporter;
 
-            for ($i = 0; $i < 3; $i += 1) {
-                $reporter->onUpdate($success->reveal());
-            }
-
-            expect(function () use ($reporter) {
+                for ($i = 0; $i < 3; $i += 1) {
+                    $reporter->onUpdate($success->reveal());
+                }
                 $reporter->onTestEnd();
-            })->output()->toMatch("/^OK/m");
+            });
+
+            expect($callback)->when()->run()->output()->match("/^OK/m");
         }
     );
 
     it(
         "prints FAILURES! when at least one test failed",
         function () use ($baseReporter, $failure) {
-            $reporter = clone $baseReporter;
+            $callback = callback(function () use ($baseReporter, $failure) {
+                $reporter = clone $baseReporter;
+                $reporter->onUpdate($failure->reveal());
 
-            $reporter->onUpdate($failure->reveal());
-            expect(array($reporter, "onTestEnd"))
-                ->output()->toMatch("/^FAILURES!/m");
+                $reporter->onTestEnd();
+            });
+
+            expect($callback)->when()->run()->output()->match("/^FAILURES!/m");
         }
     );
 
     it(
         "prints the number of tests with no failures",
         function () use ($baseReporter, $success) {
-            $reporter = clone $baseReporter;
+            $callback = callback(function () use ($baseReporter, $success) {
+                $reporter = clone $baseReporter;
 
-            for ($i = 0; $i < 3; $i += 1) {
-                $reporter->onUpdate($success->reveal());
-            }
+                for ($i = 0; $i < 3; $i += 1) {
+                    $reporter->onUpdate($success->reveal());
+                }
 
-            expect(array($reporter, "onTestEnd"))
-                ->output()->toMatch("/\(3 tests\)/");
+                $reporter->onTestEnd();
+            });
+
+            expect($callback)->when()->run()->output()->match("/\(3 tests\)/");
         }
     );
 
@@ -108,8 +117,8 @@ describe("DotReporter", function ($vars) {
                 $reporter->onUpdate($success->reveal());
             }
 
-            expect(array($reporter, "onTestEnd"))
-                ->output()->toMatch("/Failures: 1/");
+            expect(array($reporter, "onTestEnd"))->when()->run()
+                ->output()->match("/Failures: 1/");
         }
     );
 
@@ -120,8 +129,8 @@ describe("DotReporter", function ($vars) {
 
             $reporter->onUpdate($failure->reveal());
 
-            expect(array($reporter, "onTestEnd"))
-                ->output()->toMatch("/^1\) test title: foo was not bar$/m");
+            expect(array($reporter, "onTestEnd"))->when()->run()
+                ->output()->match("/^1\) test title: foo was not bar$/m");
         }
     );
 });
