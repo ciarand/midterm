@@ -9,7 +9,7 @@ describe("the hero known as the FileGlobber", function () {
          expect($globber->getIterator())->to()->be()->anInstanceOf("RegexIterator");
     });
 
-    it("should parse globstar-style globs as regexes", function ($glob, $regex, $recurse) {
+    it("should parse globstars as regexes", function ($glob, $regex, $recurse) {
         $iterator = with($globber = new FileGlobber($glob))->getIterator();
 
         expect($iterator->getRegex())->to()->be()->a($regex);
