@@ -5,6 +5,8 @@ use ArrayAccess;
 use Ciarand\Midterm\Exception\SpecFailedException;
 use Ciarand\Midterm\Exception\SpecSkippedException;
 use Ciarand\Midterm\Result\SpecResultFactory;
+use Ciarand\Midterm\Spec\Permutation;
+use Ciarand\Midterm\Collection\PermutationCollection;
 
 class Spec extends BaseComponent
 {
@@ -37,7 +39,7 @@ class Spec extends BaseComponent
      * @param SuiteHelper $helper
      * @return SpecResult
      */
-    public function runWithData(array $data, SuiteHelper $helper)
+    public function runWithData(Permutation $perm, SuiteHelper $helper)
     {
         $factory = new SpecResultFactory;
 
@@ -49,9 +51,11 @@ class Spec extends BaseComponent
                 $this->callback->bindTo($helper);
             }
 
+            $args = $perm->getArgs();
+
             ob_start();
-            array_push($data, $helper);
-            call_user_func_array($this->callback, $data);
+            array_push($args, $helper);
+            call_user_func_array($this->callback, $args);
             ob_end_clean();
 
             return $factory->pass($this->title);
@@ -78,7 +82,7 @@ class Spec extends BaseComponent
         throw new SpecSkippedException($message);
     }
 
-    public function with(array $args)
+    public function with(PermutationCollection $args)
     {
         $this->args = $args;
     }

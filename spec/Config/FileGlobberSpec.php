@@ -19,10 +19,10 @@ describe("the hero known as the FileGlobber", function () {
 
         expect($globber->isRecursive())->to()->be()->a($recurse);
     })->with(
-        array("**/*Spec.php", '/^(.+)?Spec\.php$/', true),
-        array("../**/*Spec.php", '/^(.+)?Spec\.php$/', true),
-        array("../*Spec*.php", '/^(.+)?Spec(.+)?\.php$/', false),
-        array("../**/Spec*.php", '/^Spec(.+)?\.php$/', true),
-        array("*Spec*.php", '/^(.+)?Spec(.+)?\.php$/', false)
+        data("**/*Spec.php", '/^(.+)?Spec\.php$/', true),
+        data("../**/*Spec.php", '/^(.+)?Spec\.php$/', true),
+        data("../*Spec*.php", '/^(.+)?Spec(.+)?\.php$/', false),
+        data("../**/Spec*.php", '/^Spec(.+)?\.php$/', true),
+        data("*Spec*.php", '/^(.+)?Spec(.+)?\.php$/', false)
     );
 });

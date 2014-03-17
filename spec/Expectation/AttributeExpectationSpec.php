@@ -17,9 +17,9 @@ describe("the attribute expectation", function () {
 
         expect($expectation)->when()->run()->not()->toThrow();
     })->with(
-        array("foo"),
-        array("baz"),
-        array("hello")
+        data("foo"),
+        data("baz"),
+        data("hello")
     );
 
     it("should fail on an incorrect key() check", function ($key) {
@@ -36,9 +36,9 @@ describe("the attribute expectation", function () {
 
         expect($expectation)->when()->run()->toThrow();
     })->with(
-        array("bar"),
-        array("idk"),
-        array("world")
+        data("bar"),
+        data("idk"),
+        data("world")
     );
 
     it("should pass on a correct property() check", function ($key) {
@@ -55,9 +55,9 @@ describe("the attribute expectation", function () {
 
         expect($expectation)->when()->run()->not()->toThrow();
     })->with(
-        array("foo"),
-        array("baz"),
-        array("hello")
+        data("foo"),
+        data("baz"),
+        data("hello")
     );
 
     it("should fail on an incorrect property() check", function ($key) {
@@ -74,9 +74,9 @@ describe("the attribute expectation", function () {
 
         expect($expectation)->when()->run()->toThrow();
     })->with(
-        array("bar"),
-        array("idk"),
-        array("world")
+        data("bar"),
+        data("idk"),
+        data("world")
     );
 
     it("should pass on a correct length() or count() check", function ($count) {
@@ -90,7 +90,7 @@ describe("the attribute expectation", function () {
 
         expect($expectation)->when()->run()->not()->toThrow();
     })->with(
-        array(5)
+        data(5)
     );
 
     it("should fail on an incorrect length() or count() check", function ($count) {
@@ -104,13 +104,13 @@ describe("the attribute expectation", function () {
 
         expect($expectation)->when()->run()->toThrow();
     })->with(
-        array(0),
-        array(1),
-        array(2),
-        array(3),
-        array(4),
-        array(6),
-        array(7)
+        data(0),
+        data(1),
+        data(2),
+        data(3),
+        data(4),
+        data(6),
+        data(7)
     );
 
     it("should pass on a correct element() check", function ($elem) {
@@ -127,9 +127,9 @@ describe("the attribute expectation", function () {
 
         expect($expectation)->when()->run()->not()->toThrow();
     })->with(
-        array("bar"),
-        array("idk"),
-        array("world")
+        data("bar"),
+        data("idk"),
+        data("world")
     );
 
     it("should fail on an incorrect element() check", function ($elem) {
@@ -146,8 +146,8 @@ describe("the attribute expectation", function () {
 
         expect($expectation)->when()->run()->toThrow();
     })->with(
-        array("foo"),
-        array("baz"),
-        array("hello")
+        data("foo"),
+        data("baz"),
+        data("hello")
     );
 });

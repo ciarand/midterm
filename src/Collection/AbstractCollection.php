@@ -7,6 +7,7 @@ use ArrayIterator;
 use Exception;
 
 use Ciarand\Midterm\BaseComponent;
+use Ciarand\Midterm\Presenter\PresenterFactory;
 
 /**
  * An AbstractCollection is an abstract implementation of an array-like 
@@ -100,10 +101,11 @@ abstract class AbstractCollection extends BaseComponent implements
             return;
         }
 
+        $presenter = new PresenterFactory;
         $message = sprintf(
             "%s is an invalid data type for %s",
-            get_class(reset($invalid)),
-            get_class($this)
+            $presenter->present((reset($invalid))),
+            $presenter->present($this)
         );
 
         throw new Exception($message);

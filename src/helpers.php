@@ -4,6 +4,7 @@ use Ciarand\Midterm\Suite;
 use Ciarand\Midterm\SuiteHelper;
 use Ciarand\Midterm\GlobalState;
 use Ciarand\Midterm\Spec;
+use Ciarand\Midterm\Spec\Permutation;
 use Ciarand\Midterm\SpecRunner;
 use Ciarand\Midterm\CallbackGenerator;
 use Ciarand\Midterm\Expectation\AmorphousExpectation;
@@ -87,6 +88,11 @@ function expect($thing)
 function callback($callback)
 {
     return with(new CallbackGenerator)->generate($callback);
+}
+
+function data()
+{
+    return new Permutation(func_get_args());
 }
 
 if (!function_exists("with")) {

@@ -95,12 +95,12 @@ describe("the callback expectation", function () {
 
         expect($expectation)->when()->run()->toThrow();
     })->with(
-        array("foo"),
-        array("barfoo"),
-        array("bar"),
-        array("baz"),
-        array("foobaz"),
-        array("barbaz")
+        data("foo"),
+        data("barfoo"),
+        data("bar"),
+        data("baz"),
+        data("foobaz"),
+        data("barbaz")
     );
 
     it("should return a StringExpectation from output()", function () {

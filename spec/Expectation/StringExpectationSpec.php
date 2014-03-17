@@ -12,10 +12,10 @@ describe("the string expectation", function () {
 
         expect($callback)->when()->run()->not()->toThrow();
     })->with(
-        array("foo"),
-        array("bar"),
-        array("baz"),
-        array(" ")
+        data("foo"),
+        data("bar"),
+        data("baz"),
+        data(" ")
     );
 
     it("should fail on a false toContain() call", function ($needle) {
@@ -27,10 +27,10 @@ describe("the string expectation", function () {
 
         expect($callback)->when()->run()->toThrow();
     })->with(
-        array("foobar"),
-        array("barfoo"),
-        array("bazzz"),
-        array("x")
+        data("foobar"),
+        data("barfoo"),
+        data("bazzz"),
+        data("x")
     );
 
     it("should pass on a true beginWith() call", function ($needle) {
@@ -42,11 +42,11 @@ describe("the string expectation", function () {
 
         expect($callback)->when()->run()->not()->toThrow();
     })->with(
-        array("fo"),
-        array("foo"),
-        array("foo "),
-        array("foo bar"),
-        array("foo bar baz")
+        data("fo"),
+        data("foo"),
+        data("foo "),
+        data("foo bar"),
+        data("foo bar baz")
     );
 
     it("should fail on a false beginWith() call", function ($needle) {
@@ -58,11 +58,11 @@ describe("the string expectation", function () {
 
         expect($callback)->when()->run()->toThrow();
     })->with(
-        array("fo"),
-        array("foo"),
-        array("foo "),
-        array("foo bar"),
-        array("foo bar baz")
+        data("fo"),
+        data("foo"),
+        data("foo "),
+        data("foo bar"),
+        data("foo bar baz")
     );
 
     it("should pass on a true endWith() call", function ($needle) {
@@ -74,11 +74,11 @@ describe("the string expectation", function () {
 
         expect($callback)->when()->run()->not()->toThrow();
     })->with(
-        array("z"),
-        array("az"),
-        array("baz"),
-        array("bar baz"),
-        array("foo bar baz")
+        data("z"),
+        data("az"),
+        data("baz"),
+        data("bar baz"),
+        data("foo bar baz")
     );
 
     it("should fail on a false endWith() call", function ($needle) {
@@ -90,11 +90,11 @@ describe("the string expectation", function () {
 
         expect($callback)->when()->run()->toThrow();
     })->with(
-        array("z"),
-        array("az"),
-        array("baz"),
-        array("bar baz"),
-        array("foo bar baz")
+        data("z"),
+        data("az"),
+        data("baz"),
+        data("bar baz"),
+        data("foo bar baz")
     );
 
     it("should pass on a true match() call", function ($pattern) {
@@ -106,11 +106,11 @@ describe("the string expectation", function () {
 
         expect($callback)->when()->run()->not()->toThrow();
     })->with(
-        array("/^foo/"),
-        array("/^foo bar/"),
-        array("/baz$/"),
-        array("/^foo bar baz$/"),
-        array("/^FoO BAR bAz/i")
+        data("/^foo/"),
+        data("/^foo bar/"),
+        data("/baz$/"),
+        data("/^foo bar baz$/"),
+        data("/^FoO BAR bAz/i")
     );
 
     it("should fail on a false match() call", function ($pattern) {
@@ -122,10 +122,10 @@ describe("the string expectation", function () {
 
         expect($callback)->when()->run()->toThrow();
     })->with(
-        array("/foo$/"),
-        array("/foo bar$/"),
-        array("/^baz/"),
-        array("/^foo baz bar$/"),
-        array("/^FoO BAR bAz/")
+        data("/foo$/"),
+        data("/foo bar$/"),
+        data("/^baz/"),
+        data("/^foo baz bar$/"),
+        data("/^FoO BAR bAz/")
     );
 });

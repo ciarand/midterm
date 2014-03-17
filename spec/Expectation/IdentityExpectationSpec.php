@@ -138,9 +138,9 @@ describe("the IdentityExpectation", function () {
 
         expect($callback)->when()->run()->not()->toThrow();
     })->with(
-        array(1, 1),
-        array("1", "1"),
-        array(true, true)
+        data(1, 1),
+        data("1", "1"),
+        data(true, true)
     );
 
     it("should fail on a false `a()` check", function ($actual, $expected) {
@@ -152,8 +152,8 @@ describe("the IdentityExpectation", function () {
 
         expect($callback)->when()->run()->toThrow();
     })->with(
-        array(1, "1"),
-        array(true, 1),
-        array(null, false)
+        data(1, "1"),
+        data(true, 1),
+        data(null, false)
     );
 });

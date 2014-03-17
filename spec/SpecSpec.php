@@ -14,7 +14,7 @@ describe("Spec", function ($vars) {
 
         $suiteHelper = new SuiteHelper;
 
-        $result = $test->runWithData(array(), $suiteHelper);
+        $result = $test->runWithData(data(), $suiteHelper);
         expect($result->didFail())->to()->be()->false();
         expect($result->didSkip())->to()->be()->false();
         expect($result->didPass())->to()->be()->true();
@@ -27,7 +27,7 @@ describe("Spec", function ($vars) {
 
         $suiteHelper = new SuiteHelper;
 
-        $result = $test->runWithData(array(), $suiteHelper);
+        $result = $test->runWithData(data(), $suiteHelper);
         expect($result->didFail())->to()->be()->true();
         expect($result->didSkip())->to()->be()->false();
         expect($result->didPass())->to()->be()->false();
@@ -40,7 +40,7 @@ describe("Spec", function ($vars) {
 
         $suiteHelper = new SuiteHelper;
 
-        $result = $test->runWithData(array(), $suiteHelper);
+        $result = $test->runWithData(data(), $suiteHelper);
         expect($result->didFail())->to()->be()->false();
         expect($result->didSkip())->to()->be()->true();
         expect($result->didPass())->to()->be()->false();
@@ -79,12 +79,30 @@ describe("Spec", function ($vars) {
             // do nothing
         });
 
-        $result = $test->runWithData(array(), new SuiteHelper);
+        $result = $test->runWithData(data(), new SuiteHelper);
 
         expect($result->getMessage())->to()->be()->null();
     });
 
-    it("should run multiple times when `with` is called", function ($spec) {
+
+    it("should expect a PermutationCollection in with()", function () {
+        $history = array();
+        $test = new Spec("foo", function ($data) use (&$history) {
+            $history[] = $data;
+        });
+        $runner = new SpecRunner($test);
+
+        $runner->with(
+            data(true),
+            data(false)
+        );
+
+        $runner->run(new SuiteHelper);
+
+        expect($history)->to()->be()->an(array(true, false));
+    });
+
+    it("should run multiple times when `with` is called", function () {
         $count = 0;
 
         $test = new Spec("foo", function () use (&$count) {
@@ -93,7 +111,7 @@ describe("Spec", function ($vars) {
 
         $runner = new SpecRunner($test);
 
-        $runner->with(array("foo"), array("bar"));
+        $runner->with(data("foo"), data("bar"));
 
         $runner->run(new SuiteHelper);
 
