@@ -92,31 +92,35 @@ abstract class AbstractCollection extends BaseComponent implements
 
     protected function guard($data)
     {
-        $data = is_array($data) ? $data : (array) $data;
+        $invalid = is_array($data)
+            ? $this->filterArray($data)
+            : ($this->filter($data) ? array() : array($data));
 
-        $invalid = $this->filterForInvalidElements($data);
-
-        if (count($invalid)) {
-            $message = sprintf(
-                "%s is an invalid data type for %s",
-                get_class($invalid[0]),
-                get_called_class()
-            );
-
-            throw new Exception($message);
+        if (count($invalid) === 0) {
+            return;
         }
-    }
 
-    protected function filterForInvalidElements($data)
-    {
-        return array_uintersect(
-            $data,
-            array_filter($data, array($this, "filter")),
-            function ($foo, $bar) {
-                return (int) ($foo === $bar);
-            }
+        $message = sprintf(
+            "%s is an invalid data type for %s",
+            get_class(reset($invalid)),
+            get_class($this)
         );
+
+        throw new Exception($message);
     }
 
-    abstract protected function filter($value);
+    protected function filterArray($data)
+    {
+        if (count($data) === 0) {
+            return array();
+        }
+
+        $self = $this;
+
+        return array_filter($data, function ($elem) use ($self) {
+            return !$self->filter($elem);
+        });
+    }
+
+    abstract public function filter($value);
 }

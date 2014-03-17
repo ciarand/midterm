@@ -17,7 +17,7 @@ describe("Suite Collection", function () {
             )
         );
 
-        expect($callback)->toThrow($expected)->whenRun();
+        expect($callback)->when()->run()->toThrow($expected);
     });
 
     it("should allow adding items via array syntax", function () {
@@ -26,6 +26,6 @@ describe("Suite Collection", function () {
 
         $collection[] = $suite;
 
-        expect(count($collection))->toBe(1);
+        expect($collection)->toHave()->count(1);
     });
 });

@@ -4,7 +4,7 @@ use Ciarand\Midterm\Suite;
 
 class SuiteCollection extends AbstractCollection
 {
-    protected function filter($value)
+    public function filter($value)
     {
         return $value instanceof Suite;
     }
