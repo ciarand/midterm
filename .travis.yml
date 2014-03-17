@@ -14,5 +14,5 @@ script:
 
 matrix:
     allow_failures:
-        # until hhvm supports closures correctly
+        # until hhvm supports X correctly, where X is idk - not segfaulting?
         - php: hhvm
