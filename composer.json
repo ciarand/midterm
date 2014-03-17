@@ -1,4 +1,16 @@
 {
+    "name": "ciarand/midterm",
+    "description": "A lightweight, BDD-style testing framework for PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ciaran Downey",
+            "email": "code@ciarand.me",
+            "homepage": "http://ciarand.me",
+            "role": "Developer"
+        }
+    ],
+    "keywords": ["testing", "bdd", "tdd"],
     "require-dev": {
         "psy/psysh": "dev-master",
         "ciarand/make-php-nice": "dev-master",
