@@ -10,7 +10,7 @@ describe("SuiteHelper", function ($vars) {
 
         $helper->inject(array("foo" => "bar"));
 
-        expect($helper->export())->toBe(array("foo" => "bar"));
+        expect($helper->export())->to()->be()->an(array("foo" => "bar"));
     });
 
     it("should implement count correctly", function () {
@@ -18,7 +18,7 @@ describe("SuiteHelper", function ($vars) {
 
         $helper->inject(array("foo" => "bar", "baz" => "idk"));
 
-        expect(count($helper))->toBe(2);
+        expect(count($helper))->to()->be()->an(2);
     });
 
     it("should propagate a fail event", function () {
@@ -27,14 +27,14 @@ describe("SuiteHelper", function ($vars) {
         $wasCalled = false;
 
         $helper->on("fail", function ($actual) use ($message, &$wasCalled) {
-            expect($actual)->toBe($message);
+            expect($actual)->to()->be()->an($message);
 
             $wasCalled = true;
         });
 
         $helper->fail($message);
 
-        expect($wasCalled)->toBe(true);
+        expect($wasCalled)->to()->be()->true();
     });
 
     it("should propagate a skip event", function () {
@@ -43,24 +43,24 @@ describe("SuiteHelper", function ($vars) {
         $wasCalled = false;
 
         $helper->on("skip", function ($actual) use ($message, &$wasCalled) {
-            expect($actual)->toBe($message);
+            expect($actual)->to()->be()->an($message);
 
             $wasCalled = true;
         });
 
         $helper->skip($message);
 
-        expect($wasCalled)->toBe(true);
+        expect($wasCalled)->to()->be()->true();
     });
 
     it("should implement arrayaccess correctly", function () {
         $helper = new SuiteHelper;
         $helper["foo"] = "bar";
 
-        expect($helper["foo"])->toBe("bar");
+        expect($helper["foo"])->to()->be()->an("bar");
 
         unset($helper["foo"]);
 
-        expect(isset($helper["foo"]))->toBe(false);
+        expect(isset($helper["foo"]))->to()->be()->false();
     });
 });

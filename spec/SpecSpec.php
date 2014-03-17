@@ -15,9 +15,9 @@ describe("Spec", function ($vars) {
         $suiteHelper = new SuiteHelper;
 
         $result = $test->runWithData(array(), $suiteHelper);
-        expect($result->didFail())->toBe(false);
-        expect($result->didSkip())->toBe(false);
-        expect($result->didPass())->toBe(true);
+        expect($result->didFail())->to()->be()->false();
+        expect($result->didSkip())->to()->be()->false();
+        expect($result->didPass())->to()->be()->true();
     });
 
     it("should return a fail result on a failing test", function () {
@@ -28,9 +28,9 @@ describe("Spec", function ($vars) {
         $suiteHelper = new SuiteHelper;
 
         $result = $test->runWithData(array(), $suiteHelper);
-        expect($result->didFail())->toBe(true);
-        expect($result->didSkip())->toBe(false);
-        expect($result->didPass())->toBe(false);
+        expect($result->didFail())->to()->be()->true();
+        expect($result->didSkip())->to()->be()->false();
+        expect($result->didPass())->to()->be()->false();
     });
 
     it("should return a skip result on a skipped test", function () {
@@ -41,9 +41,9 @@ describe("Spec", function ($vars) {
         $suiteHelper = new SuiteHelper;
 
         $result = $test->runWithData(array(), $suiteHelper);
-        expect($result->didFail())->toBe(false);
-        expect($result->didSkip())->toBe(true);
-        expect($result->didPass())->toBe(false);
+        expect($result->didFail())->to()->be()->false();
+        expect($result->didSkip())->to()->be()->true();
+        expect($result->didPass())->to()->be()->false();
     });
 
     it("should be able to fail a test with message", function ($spec) {
@@ -56,7 +56,7 @@ describe("Spec", function ($vars) {
 
             $spec->fail("Exception was not thrown");
         } catch (SpecFailedException $e) {
-            expect($e->getMessage())->toBe("foobar");
+            expect($e->getMessage())->to()->be()->a("foobar");
         }
     });
 
@@ -70,7 +70,7 @@ describe("Spec", function ($vars) {
 
             $spec->fail("Exception was not thrown");
         } catch (SpecSkippedException $e) {
-            expect($e->getMessage())->toBe("foobar");
+            expect($e->getMessage())->to()->be()->a("foobar");
         };
     });
 
@@ -81,7 +81,7 @@ describe("Spec", function ($vars) {
 
         $result = $test->runWithData(array(), new SuiteHelper);
 
-        expect($result->getMessage())->toBe(null);
+        expect($result->getMessage())->to()->be()->null();
     });
 
     it("should run multiple times when `with` is called", function ($spec) {
@@ -97,6 +97,6 @@ describe("Spec", function ($vars) {
 
         $runner->run(new SuiteHelper);
 
-        expect($count)->toBe(2);
+        expect($count)->to()->be()->a(2);
     });
 });

@@ -7,15 +7,13 @@ use Ciarand\Midterm\Reporter\TapReporter;
 
 include "spec/Reporter/DotReporterSpec.php";
 include "spec/Reporter/TapReporterSpec.php";
-// include "spec/SuiteHelperSpec.php";
-// include "spec/SpecSpec.php";
-// include "spec/Presenter/PresenterSpec.php";
-// include "spec/MidtermSpec.php";
-// include "spec/ContainerSpec.php";
+include "spec/SuiteHelperSpec.php";
+include "spec/SpecSpec.php";
+include "spec/Presenter/PresenterSpec.php";
+include "spec/MidtermSpec.php";
+include "spec/ContainerSpec.php";
 
-// include "spec/Collection/SuiteCollectionSpec.php";
-// include "spec/Expectation/StrictEqualityMatcherSpec.php";
-// include "spec/Expectation/InstanceOfMatcherSpec.php";
+include "spec/Collection/SuiteCollectionSpec.php";
 
 include "spec/CallbackGeneratorSpec.php";
 include "spec/Expectation/AmorphousExpectationSpec.php";

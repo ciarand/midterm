@@ -15,7 +15,7 @@ describe("the Midterm class", function () {
 
         $midterm = new Midterm($container);
 
-        expect($midterm->getContainer())->toBe($container);
+        expect($midterm->getContainer())->to()->be()->a($container);
     });
 
     it("should use the container to create things", function () {

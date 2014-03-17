@@ -3,17 +3,14 @@
 use Ciarand\Midterm\Presenter\PresenterFactory;
 
 describe("ArrayPresenter", function () {
-    it("prints an empty array correctly", function () {
-        $presenter = new PresenterFactory;
-
-        expect(array($presenter, "present", array()))->toReturn("[]");
-    });
-
     it("prints values correctly", function ($arr, $expectation) {
-        $presenter = new PresenterFactory;
+        $callback = callback(function () use ($arr) {
+            $presenter = with(new PresenterFactory)->present($arr);
+        });
 
-        expect(array($presenter, "present", $arr))->toReturn($expectation);
+        expect($callback())->to()->be($expectation);
     })->with(
+        array(array(), "[]"),
         array(array(1, 2, 3), "[1, 2, 3]"),
         array(array(2, 3, 4), "[2, 3, 4]"),
         array(array(4, 5, 6), "[4, 5, 6]"),
