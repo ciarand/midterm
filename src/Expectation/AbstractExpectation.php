@@ -2,6 +2,7 @@
 
 use Ciarand\Midterm\BaseComponent;
 use Ciarand\Midterm\Exception\SpecFailedException;
+use Ciarand\Midterm\Presenter\PresenterFactory;
 
 abstract class AbstractExpectation extends BaseComponent implements
     ExpectationInterface
@@ -11,6 +12,8 @@ abstract class AbstractExpectation extends BaseComponent implements
     protected $actual;
 
     protected $message;
+
+    protected $presenter;
 
     public function __construct($actual)
     {
@@ -41,5 +44,14 @@ abstract class AbstractExpectation extends BaseComponent implements
     public function isNegated()
     {
         return (bool) $this->negated;
+    }
+
+    public function present($var)
+    {
+        if (!$this->presenter) {
+            $this->presenter = new Presenterfactory;
+        }
+
+        return $this->presenter->present($var);
     }
 }

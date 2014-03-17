@@ -1,6 +1,7 @@
 <?php namespace Ciarand\Midterm\Presenter;
 
 use Traversable;
+use Exception;
 
 class PresenterFactory implements PresenterInterface
 {
@@ -54,6 +55,11 @@ class PresenterFactory implements PresenterInterface
     public function presentTraversable($object)
     {
         return $this->presentWith($object, TraversablePresenter::className());
+    }
+
+    public function presentObject($object)
+    {
+        return $this->presentWith($object, ObjectPresenter::className());
     }
 
     protected function getPresenter($name)

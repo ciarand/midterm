@@ -7,12 +7,10 @@ class IdentityExpectation extends AbstractExpectation
      */
     public function a($expected)
     {
-        $got = $this->actual;
-
         $this->message = sprintf(
             "%s was not strictly equal to %s",
-            is_object($got) ? get_class($got) : gettype($got),
-            is_object($expected) ? get_class($expected) : gettype($expected)
+            $this->present($this->actual),
+            $this->present($expected)
         );
 
         $this->check($this->actual === $expected);
