@@ -12,7 +12,11 @@ describe("the hero known as the FileGlobber", function () {
     it("should parse globstars as regexes", function ($glob, $regex, $recurse) {
         $iterator = with($globber = new FileGlobber($glob))->getIterator();
 
-        expect($iterator->getRegex())->to()->be()->a($regex);
+        // PHP 5.3 does not offer this method
+        if (method_exists($iterator, "getRegex")) {
+            expect($iterator->getRegex())->to()->be()->a($regex);
+        }
+
         expect($globber->isRecursive())->to()->be()->a($recurse);
     })->with(
         array("**/*Spec.php", '/^(.+)?Spec\.php$/', true),
