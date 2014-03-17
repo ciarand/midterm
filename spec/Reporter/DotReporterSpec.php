@@ -5,7 +5,6 @@ use Ciarand\Midterm\Result\SpecResult;
 use Prophecy\Prophet;
 
 describe("DotReporter", function ($vars) {
-    $baseReporter = new DotReporter;
     $prophet = $prophet = new Prophet;
 
     $success = $prophet->prophesize(SpecResult::className());
@@ -18,8 +17,8 @@ describe("DotReporter", function ($vars) {
 
     it(
         "prints an F for a failing test",
-        function () use ($baseReporter, $failure) {
-            $reporter = clone $baseReporter;
+        function () use ($failure) {
+            $reporter = new DotReporter;
 
             expect(function () use ($reporter, $failure) {
                 $reporter->onSpecFail($failure->reveal());
@@ -29,8 +28,8 @@ describe("DotReporter", function ($vars) {
 
     it(
         "prints a . for a passing test",
-        function () use ($baseReporter, $success) {
-            $reporter = clone $baseReporter;
+        function () use ($success) {
+            $reporter = new DotReporter;
 
             expect(function () use ($reporter, $success) {
                 $reporter->onSpecPass($success->reveal());
@@ -38,9 +37,9 @@ describe("DotReporter", function ($vars) {
         }
     );
 
-    it("prints the time taken in a test run", function () use ($baseReporter) {
-        $callback = callback(function () use ($baseReporter) {
-            $reporter = clone $baseReporter;
+    it("prints the time taken in a test run", function () {
+        $callback = callback(function () {
+            $reporter = new DotReporter;
             $reporter->onTestBegin();
             $reporter->onTestEnd();
         });
@@ -49,9 +48,9 @@ describe("DotReporter", function ($vars) {
             ->output()->match('/^Time: (\-)?\d+(\.\d{1,2})?.*/m');
     });
 
-    it("prints the memory taken in a test run", function () use ($baseReporter) {
-        $callback = callback(function () use ($baseReporter) {
-            $reporter = clone $baseReporter;
+    it("prints the memory taken in a test run", function () {
+        $callback = callback(function () {
+            $reporter = new DotReporter;
             $reporter->onTestEnd();
         });
 
@@ -61,9 +60,9 @@ describe("DotReporter", function ($vars) {
 
     it(
         "prints OK when no tests failed",
-        function () use ($baseReporter, $success) {
-            $callback = callback(function () use ($baseReporter, $success) {
-                $reporter = clone $baseReporter;
+        function () use ($success) {
+            $callback = callback(function () use ($success) {
+                $reporter = new DotReporter;
 
                 for ($i = 0; $i < 3; $i += 1) {
                     $reporter->onUpdate($success->reveal());
@@ -77,9 +76,9 @@ describe("DotReporter", function ($vars) {
 
     it(
         "prints FAILURES! when at least one test failed",
-        function () use ($baseReporter, $failure) {
-            $callback = callback(function () use ($baseReporter, $failure) {
-                $reporter = clone $baseReporter;
+        function () use ($failure) {
+            $callback = callback(function () use ($failure) {
+                $reporter = new DotReporter;
                 $reporter->onUpdate($failure->reveal());
 
                 $reporter->onTestEnd();
@@ -91,9 +90,9 @@ describe("DotReporter", function ($vars) {
 
     it(
         "prints the number of tests with no failures",
-        function () use ($baseReporter, $success) {
-            $callback = callback(function () use ($baseReporter, $success) {
-                $reporter = clone $baseReporter;
+        function () use ($success) {
+            $callback = callback(function () use ($success) {
+                $reporter = new DotReporter;
 
                 for ($i = 0; $i < 3; $i += 1) {
                     $reporter->onUpdate($success->reveal());
@@ -108,8 +107,8 @@ describe("DotReporter", function ($vars) {
 
     it(
         "prints the number of tests with some failures",
-        function () use ($baseReporter, $failure, $success) {
-            $reporter = clone $baseReporter;
+        function () use ($failure, $success) {
+            $reporter = new DotReporter;
 
             $reporter->onUpdate($failure->reveal());
 
@@ -124,8 +123,8 @@ describe("DotReporter", function ($vars) {
 
     it(
         "prints the failed spec names",
-        function () use ($baseReporter, $failure) {
-            $reporter = clone $baseReporter;
+        function () use ($failure) {
+            $reporter = new DotReporter;
 
             $reporter->onUpdate($failure->reveal());
 
