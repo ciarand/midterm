@@ -1,3 +1,5 @@
+This project is deprecated and unmaintained. Proceed with caution!
+
 Midterm
 =======
 >A lightweight, BDD-style testing framework for PHP
